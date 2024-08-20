@@ -57,14 +57,6 @@ export default function SiteManagementList({
     }
   }
 
-  const getFaviconSrc = (favicon: string | null) => {
-    if (!favicon) return '/default-favicon.png' // Provide a default favicon
-    if (favicon.startsWith('data:image') || favicon.startsWith('http')) {
-      return favicon
-    }
-    return `data:image/png;base64,${favicon}`
-  }
-
   return (
     <div className='space-y-4'>
       {sites.map((site) => (
@@ -104,7 +96,7 @@ export default function SiteManagementList({
                   setEditingSite({ ...editingSite, favicon: e.target.value })
                 }
                 className='w-full p-2 border rounded'
-                placeholder='Favicon URL or Base64 (optional)'
+                placeholder='Favicon URL (optional)'
               />
               <div className='flex justify-end space-x-2'>
                 <button
@@ -124,13 +116,17 @@ export default function SiteManagementList({
           ) : (
             <>
               <div className='flex items-center mb-2'>
-                <Image
-                  src={getFaviconSrc(site.favicon)}
-                  alt={`${site.title} favicon`}
-                  width={16}
-                  height={16}
-                  className='mr-2'
-                />
+                {site.favicon ? (
+                  <Image
+                    src={`data:image/png;base64,${site.favicon}`}
+                    alt={`${site.title} favicon`}
+                    width={16}
+                    height={16}
+                    className='mr-2'
+                  />
+                ) : (
+                  <div className='w-4 h-4 rounded-full bg-gray-400 mr-2'></div>
+                )}
                 <h3 className='text-lg font-semibold'>{site.title}</h3>
               </div>
               <p className='text-gray-600 mb-2'>{site.content || ''}</p>

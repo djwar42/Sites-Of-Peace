@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import SiteList from '../components/SiteList'
-import SearchBar from '../components/SearchBar'
 import prisma from '../lib/prisma'
 
 type Site = {
@@ -33,9 +32,6 @@ export default async function Home() {
       <header className='bg-gradient-to-r from-violet-600 to-indigo-600 text-primary-foreground py-4 px-6'>
         <div className='container mx-auto flex items-center'>
           <h1 className='text-2xl font-bold'>Sites Of Peace</h1>
-          <div className='ml-auto'>
-            <SearchBar />
-          </div>
         </div>
       </header>
       <main className='flex-1 bg-background text-foreground py-8 px-6'>
