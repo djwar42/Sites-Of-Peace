@@ -8,7 +8,6 @@ export default clerkMiddleware((auth, req) => {
     auth().protect((has) => {
       return has({ permission: 'org:addsite:addsite' })
     })
-    //auth().protect()
   }
 })
 
