@@ -3,7 +3,15 @@ import SiteList from '../components/SiteList'
 import SearchBar from '../components/SearchBar'
 import prisma from '../lib/prisma'
 
-async function getSites() {
+type Site = {
+  id: string
+  title: string
+  content: string | null
+  favicon: string | null
+  url: string
+}
+
+async function getSites(): Promise<Site[]> {
   const sites = await prisma.site.findMany({
     where: { published: true },
     select: {

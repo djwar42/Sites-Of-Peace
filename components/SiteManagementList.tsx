@@ -6,8 +6,8 @@ import Image from 'next/image'
 type Site = {
   id: string
   title: string
-  content: string
-  favicon: string
+  content: string | null
+  favicon: string | null
   url: string
   published: boolean
 }
@@ -57,7 +57,8 @@ export default function SiteManagementList({
     }
   }
 
-  const getFaviconSrc = (favicon: string) => {
+  const getFaviconSrc = (favicon: string | null) => {
+    if (!favicon) return '/default-favicon.png' // Provide a default favicon
     if (favicon.startsWith('data:image') || favicon.startsWith('http')) {
       return favicon
     }
@@ -80,7 +81,7 @@ export default function SiteManagementList({
                 placeholder='Title'
               />
               <textarea
-                value={editingSite.content}
+                value={editingSite.content || ''}
                 onChange={(e) =>
                   setEditingSite({ ...editingSite, content: e.target.value })
                 }
@@ -98,7 +99,7 @@ export default function SiteManagementList({
               />
               <input
                 type='text'
-                value={editingSite.favicon}
+                value={editingSite.favicon || ''}
                 onChange={(e) =>
                   setEditingSite({ ...editingSite, favicon: e.target.value })
                 }
@@ -123,18 +124,16 @@ export default function SiteManagementList({
           ) : (
             <>
               <div className='flex items-center mb-2'>
-                {site.favicon && (
-                  <Image
-                    src={getFaviconSrc(site.favicon)}
-                    alt={`${site.title} favicon`}
-                    width={28}
-                    height={28}
-                    className='mr-2'
-                  />
-                )}
+                <Image
+                  src={getFaviconSrc(site.favicon)}
+                  alt={`${site.title} favicon`}
+                  width={16}
+                  height={16}
+                  className='mr-2'
+                />
                 <h3 className='text-lg font-semibold'>{site.title}</h3>
               </div>
-              <p className='text-gray-600 mb-2'>{site.content}</p>
+              <p className='text-gray-600 mb-2'>{site.content || ''}</p>
               <a
                 href={site.url}
                 target='_blank'

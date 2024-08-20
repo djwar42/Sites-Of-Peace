@@ -6,9 +6,9 @@ import Image from 'next/image'
 type Site = {
   id: string
   title: string
-  content: string
-  favicon: string
-  url: string // Add this if it's not already included
+  content: string | null
+  favicon: string | null
+  url: string
 }
 
 export default function SiteList({ initialSites }: { initialSites: Site[] }) {
@@ -18,6 +18,14 @@ export default function SiteList({ initialSites }: { initialSites: Site[] }) {
   const filteredSites = sites.filter((site) =>
     site.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const getFaviconSrc = (favicon: string | null) => {
+    if (!favicon) return '/default-favicon.png' // Provide a default favicon
+    if (favicon.startsWith('data:image') || favicon.startsWith('http')) {
+      return favicon
+    }
+    return `data:image/png;base64,${favicon}`
+  }
 
   return (
     <div>
@@ -29,20 +37,16 @@ export default function SiteList({ initialSites }: { initialSites: Site[] }) {
           >
             <div className='p-4'>
               <div className='flex items-center mb-2'>
-                {site.favicon ? (
-                  <Image
-                    src={`data:image/png;base64,${site.favicon}`}
-                    alt={`${site.title} favicon`}
-                    width={28}
-                    height={28}
-                    className='mr-2'
-                  />
-                ) : (
-                  <div className='w-4 h-4 bg-gray-300 rounded-full mr-2' />
-                )}
+                <Image
+                  src={getFaviconSrc(site.favicon)}
+                  alt={`${site.title} favicon`}
+                  width={28}
+                  height={28}
+                  className='mr-2'
+                />
                 <h2 className='text-xl font-semibold'>{site.title}</h2>
               </div>
-              <p className='text-gray-600 mb-2'>{site.content}</p>
+              <p className='text-gray-600 mb-2'>{site.content || ''}</p>
               <a
                 href={site.url}
                 target='_blank'
